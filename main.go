@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/FulgurCode/school-management-system/database"
+	"github.com/FulgurCode/school-management-system/connections"
 	"github.com/FulgurCode/school-management-system/router"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -17,7 +17,7 @@ func main() {
 	godotenv.Load(".env")
 
 	// Connecting to database
-	database.Connect()
+	connections.Connect()
 
 	// Setting up gin router
 	gin.SetMode(gin.DebugMode)
@@ -37,5 +37,5 @@ func main() {
 	}
 
 	// Closing database connection
-	defer database.Db.Close()
+	defer connections.Db.Close()
 }
