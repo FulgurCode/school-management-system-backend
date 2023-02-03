@@ -23,6 +23,7 @@ func Router() *gin.Engine {
 	router.POST("/api/admin/login", controller.AdminLoginRoute)
   router.GET("/api/admin/logout", controller.AdminLogoutRoute)
 	router.GET("/api/admin/checklogin", controller.AdminCheckLoginRoute)
+	router.POST("/api/admin/change-password", controller.ChangeAdminPassword)
 
 	return router
 }

@@ -51,3 +51,25 @@ func AdminCheckLoginRoute(c *gin.Context) {
 		c.JSON(401, "Not Logged In")
 	}
 }
+
+// POST request on '/api/admin/change-password'
+func ChangeAdminPassword(c *gin.Context) {
+	// Getting request body
+	var data models.Admin
+	if err := c.BindJSON(&data); err != nil {
+		panic(err)
+	}
+
+	// Checking if loggedin
+	var session = sessions.DefaultMany(c, "admin")
+	var isLoggedIn = session.Get("isLoggedIn")
+	if isLoggedIn != true {
+		c.JSON(401, "Not Logged In")
+		return
+	}
+
+	// Change admin Password and sending response
+  data.Id = session.Get("id").(string)
+	adminHelpers.ChangeAdminPassword(data)
+	c.JSON(200, "Admin password changed successfully")
+}
