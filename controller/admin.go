@@ -4,6 +4,7 @@ import (
 	"github.com/FulgurCode/school-management-system/helpers"
 	"github.com/FulgurCode/school-management-system/helpers/adminHelpers"
 	"github.com/FulgurCode/school-management-system/helpers/databaseHelpers"
+	"github.com/FulgurCode/school-management-system/helpers/errors"
 	"github.com/FulgurCode/school-management-system/models"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -69,7 +70,36 @@ func ChangeAdminPassword(c *gin.Context) {
 	}
 
 	// Change admin Password and sending response
-  data.Id = session.Get("id").(string)
+	data.Id = session.Get("id").(string)
 	adminHelpers.ChangeAdminPassword(data)
 	c.JSON(200, "Admin password changed successfully")
+}
+
+// GET request on '/api/admin/add-teacher'
+func AddTeacherRoute(c *gin.Context) {
+	// Getting request body
+	var data models.Teacher
+	if err := c.BindJSON(&data); err != nil {
+		panic(err)
+	}
+
+	// Checking if loggedin
+	var session = sessions.DefaultMany(c, "admin")
+	var isLoggedIn = session.Get("isLoggedIn")
+	if isLoggedIn != true {
+		c.JSON(401, "Not Logged In")
+		return
+	}
+
+	// Adding teacher and sending response
+	var err = adminHelpers.AddTeacher(data)
+	if err != nil {
+		if errors.CheckDuplicateEntryError(err) {
+			c.JSON(409, "Email Already in use")
+			return
+		}
+		c.JSON(500, "Request failed")
+		return
+	}
+	c.JSON(200, "Teacher added")
 }
