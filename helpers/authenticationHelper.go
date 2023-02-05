@@ -15,7 +15,7 @@ func ComparePassword(hashedPassword string, password string) bool {
 // Hashing password using bcrypt
 func HashPassword(password string) string {
 	// Generating hashed password
-	var hashedPassword, err = bcrypt.GenerateFromPassword([]byte(password), 12)
+	var hashedPassword, err = bcrypt.GenerateFromPassword([]byte(password), 15)
   if err != nil {
     panic(err)
   }
