@@ -28,3 +28,16 @@ func ChangeAdminPassword(admin models.Admin) {
 	var query = "UPDATE admin SET password = ? WHERE id = ?;"
 	db.Exec(query, admin.Password, admin.Id)
 }
+
+// Add teacher to database
+func AddTeacher(teacher models.Teacher) error {
+	// database
+	var db = connections.Db
+
+	// Query for database
+	var query = "INSERT INTO teachers(id,fullname,email,phone,subject,address) VALUES(?,?,?,?,?,?);"
+
+	// Adding teacher to database
+	var _, err = db.Exec(query, teacher.Id, teacher.Fullname, teacher.Email, teacher.Phone, teacher.Subject, teacher.Address)
+	return err
+}
